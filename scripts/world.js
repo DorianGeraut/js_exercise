@@ -4,7 +4,7 @@ function init() {
   scene = new THREE.Scene();
 
   camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,45,30000);
-  camera.position.set(-900,-200,-900);
+  camera.position.set(-300,-100,-300);
 
   renderer = new THREE.WebGLRenderer();
   renderer.setPixelRatio( window.devicePixelRatio );
@@ -13,16 +13,16 @@ function init() {
 
   controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.addEventListener('change', render);
-  // controls.minDistance = 500;
-  // controls.maxDistance = 1500;
+  controls.minDistance = 200;
+  controls.maxDistance = 500;
 
   skybox_texture_files = [
     'textures/bkg1_front.png',
-    // 'textures/bkg1_back.png',
-    // 'textures/bkg1_top.png',
-    // 'textures/bkg1_bot.png',
-    // 'textures/bkg1_right.png',
-    // 'textures/bkg1_left.png'
+    'textures/bkg1_back.png',
+    'textures/bkg1_top.png',
+    'textures/bkg1_bot.png',
+    'textures/bkg1_right.png',
+    'textures/bkg1_left.png'
   ];
   let materialArray = [];
   let texture_loader = new THREE.TextureLoader()
@@ -39,7 +39,7 @@ function init() {
       },
       undefined,
       function( error ) {
-        console.error( 'An error happened loading file: %s.',file );
+        console.error( 'An error happened loading file: %s, try through a webserver !',file );
         console.error( error );
       }
     );
