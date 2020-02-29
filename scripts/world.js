@@ -1,9 +1,9 @@
-var scene, camera, renderer, controls;
+let scene, camera, renderer, controls;
 function init() {
 
   scene = new THREE.Scene();
 
-  camera = new THREE.PerspectiveCamera(55,window.innerWidth/window.innerHeight,45,30000);
+  camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,45,30000);
   camera.position.set(-900,-200,-900);
 
   renderer = new THREE.WebGLRenderer();
@@ -13,49 +13,55 @@ function init() {
 
   controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.addEventListener('change', render);
-  controls.minDistance = 500;
-  controls.maxDistance = 1500;
-  controls.update();
+  // controls.minDistance = 500;
+  // controls.maxDistance = 1500;
 
-  // console.info( listenerArray );
-
+  skybox_texture_files = [
+    'textures/bkg1_front.png',
+    // 'textures/bkg1_back.png',
+    // 'textures/bkg1_top.png',
+    // 'textures/bkg1_bot.png',
+    // 'textures/bkg1_right.png',
+    // 'textures/bkg1_left.png'
+  ];
   let materialArray = [];
-  let test_moche = new THREE.TextureLoader().load( 'test_moche.png', function ( err ) {console.error( 'An error happened.' );});
-  let texture_ft = new THREE.TextureLoader().load( 'bkg1_front.png', function ( err ) {console.error( 'An error happened.' );});
-  let texture_bk = new THREE.TextureLoader().load( 'bkg1_back.png', function ( err ) {console.error( 'An error happened.' );});
-  let texture_up = new THREE.TextureLoader().load( 'bkg1_top.png', function ( err ) {console.error( 'An error happened.' );});
-  let texture_dn = new THREE.TextureLoader().load( 'bkg1_bot.png', function ( err ) {console.error( 'An error happened.' );});
-  let texture_rt = new THREE.TextureLoader().load( 'bkg1_right.png', function ( err ) {console.error( 'An error happened.' );});
-  let texture_lf = new THREE.TextureLoader().load( 'bkg1_left.png', function ( err ) {console.error( 'An error happened.' );});
+  let texture_loader = new THREE.TextureLoader()
 
-  materialArray.push(new THREE.MeshBasicMaterial( { map: texture_ft }));
-  materialArray.push(new THREE.MeshBasicMaterial( { map: texture_bk }));
-  materialArray.push(new THREE.MeshBasicMaterial( { map: texture_up }));
-  materialArray.push(new THREE.MeshBasicMaterial( { map: texture_dn }));
-  materialArray.push(new THREE.MeshBasicMaterial( { map: texture_rt }));
-  materialArray.push(new THREE.MeshBasicMaterial( { map: texture_lf }));
-  for (let i = 0; i < 6; i++){
-    materialArray[i].side = THREE.BackSide;
+  for (file of skybox_texture_files){
+    console.info( 'enter while: file = %s', file );
+    texture_loader.load(
+      file,
+      function( texture ) {
+        console.info( 'load complete for file: %s.', file);
+        let material = new THREE.MeshBasicMaterial( { map: texture })
+        material.side = THREE.BackSide;
+        materialArray.push(material);
+      },
+      undefined,
+      function( error ) {
+        console.error( 'An error happened loading file: %s.',file );
+        console.error( error );
+      }
+    );
   }
 
-  let skyboxGeo = new THREE.BoxGeometry( 10000, 10000, 10000);
+  console.info(materialArray)
+
+  let skyboxGeo = new THREE.BoxGeometry( 2048, 2048, 2048);
   let skybox = new THREE.Mesh( skyboxGeo, materialArray );
   scene.add( skybox );
   animate();
 }
 
 function animate() {
-
   requestAnimationFrame(animate);
   controls.update();
   renderer.render(scene,camera);
-
 }
 
 function render() {
-
     renderer.render( scene, camera );
-
 }
+
 
 init();
