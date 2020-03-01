@@ -17,12 +17,12 @@ function init() {
   controls.maxDistance = 500;
 
   skybox_texture_files = [
-    'textures/bkg1_front.png',
-    'textures/bkg1_back.png',
+    'textures/bkg1_right.png',
+    'textures/bkg1_left.png',
     'textures/bkg1_top.png',
     'textures/bkg1_bot.png',
-    'textures/bkg1_right.png',
-    'textures/bkg1_left.png'
+    'textures/bkg1_front.png',
+    'textures/bkg1_back.png'
   ];
   let materialArray = [];
   let texture_loader = new THREE.TextureLoader()
